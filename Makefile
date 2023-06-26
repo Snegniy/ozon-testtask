@@ -2,6 +2,20 @@
 run:
 	go run cmd/main.go
 
+.PHONY: local
+local:
+	docker build -t linkshorter .
+
+.PHONY: stop
+stop:
+	docker-compose down --remove-orphans
+
+.PHONY: build
+build:
+	docker-compose down --remove-orphans
+	docker-compose build
+
+
 .PHONY: test
 test:
 	go test -v -race -cover ./...
@@ -17,3 +31,9 @@ proto:
             api/proto/shortlinks.proto
 
 .DEFAULT_GOAL := run
+
+
+#ран локал
+#ран посгрес
+#докер билд локал
+#докер билд посгрес

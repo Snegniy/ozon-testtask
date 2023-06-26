@@ -5,15 +5,15 @@ services:
     container_name: ${APP_NAME}-db
     image: postgres:alpine
     restart: always
+    env_file:
+      - .env
     environment:
-      POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - ${DB_HOST_PORT}:5432"
+      - ${DB_HOST_PORT}:5432
     volumes:
       - db-data:/var/lib/postgresql/data
-      - ./postgres/:/docker-entrypoint-initdb.d/
     networks:
       - net1
 
@@ -22,13 +22,15 @@ services:
     build: ./
     depends_on:
       - postgres
+    env_file:
+      - .env
     networks:
       - net1
     ports:
-      - ${SERVER_HTTP_HOST_PORT}:8000"
-      - ${SERVER_GRPC_HOST_PORT}:9000"
+      - ${SERVER_HTTP_HOST_PORT}:8000
+      - ${SERVER_GRPC_HOST_PORT}:9000
     environment:
-      db_url: postgres://postgres:postgres@db:5432/postgres?sslmode=disable
+      db_url: postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST_PORT}/links?sslmode=disable
 
 volumes:
   db-data:

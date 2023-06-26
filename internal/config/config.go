@@ -20,7 +20,7 @@ type Postgres struct {
 	HostPort string `env:"DB_HOST_PORT" env-default:"localhost:8888"`
 }
 
-var path = "config.env"
+var path = ".env"
 
 func NewConfig() Config {
 

@@ -9,7 +9,7 @@ RUN go build -o app ./cmd/main.go
 FROM alpine
 WORKDIR /linkshorter
 COPY --from=builder /linkshorter/app .
-COPY /config.env .
+COPY /.env .
 
 EXPOSE 8000 9000
 CMD ./app

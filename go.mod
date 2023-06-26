@@ -6,7 +6,6 @@ require (
 	github.com/go-chi/chi v1.5.4
 	github.com/ilyakaznacheev/cleanenv v1.4.2
 	github.com/jackc/pgx/v4 v4.18.1
-	github.com/jmoiron/sqlx v1.3.5
 	go.uber.org/zap v1.24.0
 	google.golang.org/grpc v1.56.1
 )
