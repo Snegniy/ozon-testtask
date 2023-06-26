@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  postgres:
+    container_name: ${APP_NAME}-db
+    image: postgres:alpine
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - ${DB_HOST_PORT}:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./postgres/:/docker-entrypoint-initdb.d/
+    networks:
+      - net1
+
+  app:
+    container_name: ${APP_NAME}
+    build: ./
+    depends_on:
+      - postgres
+    networks:
+      - net1
+    ports:
+      - ${SERVER_HTTP_HOST_PORT}:8000"
+      - ${SERVER_GRPC_HOST_PORT}:9000"
+    environment:
+      db_url: postgres://postgres:postgres@db:5432/postgres?sslmode=disable
+
+volumes:
+  db-data:
+
+networks:
+  net1:

@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "..//..//pkg/pb";
+
+service LinkShortener{
+  rpc GetBaseLink(GetBaseLinkRequest) returns (GetBaseLinkResponse);
+  rpc GetShortLink(GetShortLinkRequest) returns (GetShortLinkResponse);
+}
+
+message GetShortLinkRequest {
+  string url = 1;
+}
+
+message GetShortLinkResponse {
+  string url = 1;
+}
+
+message GetBaseLinkRequest {
+  string url = 1;
+}
+
+message GetBaseLinkResponse {
+  string url = 1;
+}

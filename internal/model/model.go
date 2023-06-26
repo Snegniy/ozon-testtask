@@ -1,9 +1,6 @@
 package model
 
-type UrlBaseStorage struct {
-	ShortURL string `json:"url,omitempty" db:"short_url"`
-}
-
-type UrlShortStorage struct {
-	BaseURL string `json:"url,omitempty" db:"base_url"`
+type UrlStorage struct {
+	BaseURL  string `json:"baseurl,omitempty" db:"base_url"`
+	ShortURL string `json:"shorturl,omitempty" db:"short_url"`
 }

@@ -14,28 +14,28 @@ func NewService(repo Repository) *Service {
 }
 
 type Repository interface {
-	GetBaseURL(url string) (model.UrlShortStorage, error)
-	GetShortURL(url string) (model.UrlBaseStorage, error)
-	WriteNewLink(url, short string) (model.UrlBaseStorage, error)
+	GetBaseURL(url string) (string, error)
+	GetShortURL(url string) (string, error)
+	WriteNewLink(url, short string) (string, error)
 }
 
-func (s *Service) GetShortLink(url string) (model.UrlBaseStorage, error) {
+func (s *Service) GetShortLink(url string) (model.UrlStorage, error) {
 	if url == "" {
-		return model.UrlBaseStorage{}, fmt.Errorf("url cannot be empty")
+		return model.UrlStorage{}, fmt.Errorf("url cannot be empty")
 	}
 	res, err := s.repo.GetShortURL(url)
 	if err != nil {
 		short := s.GenerateLink()
 		newLink, _ := s.repo.WriteNewLink(url, short)
-		return newLink, nil
+		return model.UrlStorage{ShortURL: newLink}, nil
 	}
-	return res, err
+	return model.UrlStorage{ShortURL: res}, err
 }
 
-func (s *Service) GetBaseLink(url string) (model.UrlShortStorage, error) {
+func (s *Service) GetBaseLink(url string) (model.UrlStorage, error) {
 	if url == "" {
-		return model.UrlShortStorage{}, fmt.Errorf("url cannot be empty")
+		return model.UrlStorage{}, fmt.Errorf("url cannot be empty")
 	}
 	res, err := s.repo.GetBaseURL(url)
-	return res, err
+	return model.UrlStorage{BaseURL: res}, err
 }
