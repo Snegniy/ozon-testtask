@@ -2,6 +2,8 @@ package memdb
 
 import (
 	"fmt"
+	"github.com/Snegniy/ozon-testtask/pkg/logger"
+	"go.uber.org/zap"
 	"sync"
 )
 
@@ -13,6 +15,7 @@ type Repository struct {
 }
 
 func NewRepository() *Repository {
+	logger.Debug("Creating local repository")
 	return &Repository{
 		storageBase:  make(map[string]string),
 		storageShort: make(map[string]string),
@@ -20,25 +23,30 @@ func NewRepository() *Repository {
 }
 
 func (r *Repository) GetBaseURL(url string) (string, error) {
+	logger.Debug("Repo:Getting base URL from local storage", zap.String("url", url))
 	r.mxBase.RLock()
 	defer r.mxBase.RUnlock()
 	if v, ok := r.storageShort[url]; ok {
 		return v, nil
 	}
+	logger.Warn("Couldn't find base URL", zap.String("shorturl", url))
 	return "", fmt.Errorf("short link for \"%s\" not found", url)
 }
 
 func (r *Repository) GetShortURL(url string) (string, error) {
+	logger.Debug("Repo:Getting short URL from local storage", zap.String("url", url))
 	r.mxShort.RLock()
 	defer r.mxShort.RUnlock()
 	if v, ok := r.storageBase[url]; ok {
 		return v, nil
 	}
+	logger.Warn("Couldn't find short URL", zap.String("baseurl", url))
 	return "", fmt.Errorf("base link for \"%s\" not found", url)
 
 }
 
 func (r *Repository) WriteNewLink(url, short string) (string, error) {
+	logger.Debug("Repo:Write new URL to local storage", zap.String("baseurl", url), zap.String("shorturl", short))
 	if v, err := r.GetShortURL(url); err == nil {
 		return v, nil
 	}

@@ -20,6 +20,7 @@ type Server struct {
 }
 
 func NewGrpcServer(service *service.Service) *Server {
+	logger.Debug("grpc server create")
 	return &Server{
 		services: service,
 	}

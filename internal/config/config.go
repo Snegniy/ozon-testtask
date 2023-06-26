@@ -7,7 +7,7 @@ import (
 )
 
 type Config struct {
-	DebugMode          string `env:"SERVER_LOG_MODE" env-description:"Debug mode logger" env-default:"yes"`
+	DebugMode          string `env:"SERVER_DEBUG_MODE" env-description:"Debug mode logger" env-default:"yes"`
 	HTTPServerHostPort string `env:"SERVER_HTTP_HOST_PORT" env-default:"localhost:8000"`
 	GRPCServerHostPort string `env:"SERVER_GRPC_HOST_PORT" env-default:"localhost:9000"`
 	StorageType        string `env:"STORAGE_TYPE" env-default:"memdb"`
@@ -17,7 +17,8 @@ type Config struct {
 type Postgres struct {
 	Username string `env:"DB_USER" env-default:"postgres"`
 	Password string `env:"DB_PASSWORD" env-default:"postgres"`
-	HostPort string `env:"DB_HOST_PORT" env-default:"localhost:8888"`
+	Host     string `env:"DB_HOST" env-default:"localhost"`
+	Port     string `env:"DB_PORT" env-default:"5432"`
 }
 
 var path = ".env"

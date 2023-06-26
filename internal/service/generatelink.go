@@ -1,6 +1,9 @@
 package service
 
-import "math/rand"
+import (
+	"github.com/Snegniy/ozon-testtask/pkg/logger"
+	"math/rand"
+)
 
 const (
 	charsLower = "abcdefghijklmnopqrstuvwxyz"
@@ -11,6 +14,7 @@ const (
 )
 
 func (s *Service) GenerateLink() string {
+	logger.Debug("Generating link")
 	res := make([]byte, 10)
 
 	for {
@@ -22,6 +26,7 @@ func (s *Service) GenerateLink() string {
 		if err != nil {
 			break
 		}
+		logger.Warn("multiple links")
 	}
 	return string(res)
 }

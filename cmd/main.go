@@ -11,6 +11,7 @@ import (
 	"github.com/Snegniy/ozon-testtask/pkg/logger"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
+	"go.uber.org/zap"
 )
 
 func main() {
@@ -25,7 +26,7 @@ func main() {
 		var err error
 		r, err = postgre.NewRepository(cfg)
 		if err != nil {
-			logger.Fatal("database not open")
+			logger.Fatal("database not open", zap.Error(err))
 		}
 	} else {
 		r = memdb.NewRepository()

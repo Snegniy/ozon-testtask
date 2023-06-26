@@ -10,8 +10,9 @@ services:
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: links
     ports:
-      - ${DB_HOST_PORT}:5432
+      - ${DB_PORT}:${DB_PORT}
     volumes:
       - db-data:/var/lib/postgresql/data
     networks:
@@ -29,9 +30,6 @@ services:
     ports:
       - ${SERVER_HTTP_HOST_PORT}:8000
       - ${SERVER_GRPC_HOST_PORT}:9000
-    environment:
-      db_url: postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST_PORT}/links?sslmode=disable
-
 volumes:
   db-data:
 

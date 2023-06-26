@@ -3,6 +3,7 @@ package service
 import (
 	"fmt"
 	"github.com/Snegniy/ozon-testtask/internal/model"
+	"github.com/Snegniy/ozon-testtask/pkg/logger"
 )
 
 type Service struct {
@@ -10,6 +11,7 @@ type Service struct {
 }
 
 func NewService(repo Repository) *Service {
+	logger.Debug("creating service")
 	return &Service{repo: repo}
 }
 
@@ -20,7 +22,9 @@ type Repository interface {
 }
 
 func (s *Service) GetShortLink(url string) (model.UrlStorage, error) {
+	logger.Debug("Service:GetShortLink")
 	if url == "" {
+		logger.Warn("empty url")
 		return model.UrlStorage{}, fmt.Errorf("url cannot be empty")
 	}
 	res, err := s.repo.GetShortURL(url)
@@ -33,7 +37,9 @@ func (s *Service) GetShortLink(url string) (model.UrlStorage, error) {
 }
 
 func (s *Service) GetBaseLink(url string) (model.UrlStorage, error) {
+	logger.Debug("Service:GetBaseLink")
 	if url == "" {
+		logger.Warn("empty url")
 		return model.UrlStorage{}, fmt.Errorf("url cannot be empty")
 	}
 	res, err := s.repo.GetBaseURL(url)
