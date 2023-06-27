@@ -1,11 +1,11 @@
 package http
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Snegniy/ozon-testtask/internal/model"
 	"github.com/Snegniy/ozon-testtask/pkg/logger"
 	"go.uber.org/zap"
-	"golang.org/x/net/context"
 	"net/http"
 )
 

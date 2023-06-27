@@ -21,7 +21,6 @@ type Postgres struct {
 	Password   string `env:"POSTGRES_PASSWORD" env-default:"postgres"`
 	Host       string `env:"POSTGRES_HOST" env-default:"localhost"`
 	Port       string `env:"POSTGRES_PORT" env-default:"5432"`
-	Table      string `env:"POSTGRES_DB" env-default:"links"`
 	ConnString string
 }
 
@@ -33,7 +32,7 @@ type Names struct {
 var path = ".env"
 
 func NewConfig() Config {
-
+	storageType := os.Getenv("STORAGE_TYPE")
 	log.Println("\t\tRead application configuration...")
 	var cfg Config
 
@@ -42,11 +41,10 @@ func NewConfig() Config {
 		log.Println(help)
 		log.Fatalf("%s", err)
 	}
-	env := os.Getenv("STORAGE_TYPE")
-	if env != "" {
-		cfg.StorageType = env
+	if storageType != "" {
+		cfg.StorageType = storageType
 	}
-	cfg.Postgres.ConnString = fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", cfg.Postgres.Username, cfg.Postgres.Password, cfg.Names.DB, cfg.Postgres.Port, cfg.Postgres.Table)
+	cfg.Postgres.ConnString = fmt.Sprintf("postgres://%s:%s@%s:%s/links?sslmode=disable", cfg.Postgres.Username, cfg.Postgres.Password, cfg.Names.DB, cfg.Postgres.Port)
 
 	log.Printf("\t\tSTORAGE_TYPE=%s\n", cfg.StorageType)
 	log.Println("\t\tGet configuration - OK!")

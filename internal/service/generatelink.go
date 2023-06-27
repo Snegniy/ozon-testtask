@@ -1,8 +1,8 @@
 package service
 
 import (
+	"context"
 	"github.com/Snegniy/ozon-testtask/pkg/logger"
-	"golang.org/x/net/context"
 	"math/rand"
 )
 

@@ -4,17 +4,17 @@ run:
 
 .PHONY: local
 local:
-	docker-compose down --remove-orphans
-	docker-compose --profile localdb up --build
+	docker compose down --remove-orphans
+	docker compose --profile localdb up --build
 
 .PHONY: postgres
 postgres:
-	docker-compose down --remove-orphans
-	docker-compose --profile postgres up --build
+	docker compose down --remove-orphans
+	docker compose --profile postgres up --build
 
 .PHONY: stop
 stop:
-	docker-compose down --remove-orphans
+	docker compose down --remove-orphans
 
 .PHONY: test
 test:

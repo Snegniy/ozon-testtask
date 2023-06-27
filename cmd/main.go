@@ -26,8 +26,8 @@ func main() {
 	var r service.Repository
 
 	if cfg.StorageType == "postgre" {
-		var err error
-		ctx := context.Background()
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
 		con, err := postgres.NewConnect(ctx, cfg)
 		if err != nil {
 			logger.Fatal("connection to DB error", zap.Error(err))
