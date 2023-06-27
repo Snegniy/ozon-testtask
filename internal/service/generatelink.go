@@ -2,6 +2,7 @@ package service
 
 import (
 	"github.com/Snegniy/ozon-testtask/pkg/logger"
+	"golang.org/x/net/context"
 	"math/rand"
 )
 
@@ -13,7 +14,7 @@ const (
 	chars      = charsLower + charsUpper + digits + special
 )
 
-func (s *Service) GenerateLink() string {
+func (s *Service) GenerateLink(ctx context.Context) string {
 	logger.Debug("Generating link")
 	res := make([]byte, 10)
 
@@ -21,7 +22,7 @@ func (s *Service) GenerateLink() string {
 		for i := range res {
 			res[i] = chars[rand.Intn(len(chars))]
 		}
-		_, err := s.repo.GetBaseURL(string(res))
+		_, err := s.repo.GetBaseURL(ctx, string(res))
 
 		if err != nil {
 			break

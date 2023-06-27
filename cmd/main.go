@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"github.com/Snegniy/ozon-testtask/internal/config"
 	"github.com/Snegniy/ozon-testtask/internal/repository/memdb"
 	"github.com/Snegniy/ozon-testtask/internal/repository/postgre"
@@ -9,6 +10,7 @@ import (
 	"github.com/Snegniy/ozon-testtask/internal/transport/http"
 	"github.com/Snegniy/ozon-testtask/pkg/graceful"
 	"github.com/Snegniy/ozon-testtask/pkg/logger"
+	"github.com/Snegniy/ozon-testtask/pkg/postgres"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"go.uber.org/zap"
@@ -22,9 +24,15 @@ func main() {
 	router := chi.NewRouter()
 	router.Use(middleware.Logger)
 	var r service.Repository
+
 	if cfg.StorageType == "postgre" {
 		var err error
-		r, err = postgre.NewRepository(cfg)
+		ctx := context.Background()
+		con, err := postgres.NewConnect(ctx, cfg)
+		if err != nil {
+			logger.Fatal("connection to DB error", zap.Error(err))
+		}
+		r, err = postgre.NewRepository(con)
 		if err != nil {
 			logger.Fatal("database not open", zap.Error(err))
 		}

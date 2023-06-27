@@ -5,6 +5,7 @@ import (
 	"github.com/Snegniy/ozon-testtask/internal/model"
 	"github.com/Snegniy/ozon-testtask/pkg/logger"
 	"go.uber.org/zap"
+	"golang.org/x/net/context"
 	"net/http"
 )
 
@@ -18,8 +19,8 @@ func NewHttpHandlers(srv Services) *Handlers {
 }
 
 type Services interface {
-	GetShortLink(url string) (model.UrlStorage, error)
-	GetBaseLink(url string) (model.UrlStorage, error)
+	GetShortLink(ctx context.Context, url string) (model.UrlStorage, error)
+	GetBaseLink(ctx context.Context, url string) (model.UrlStorage, error)
 }
 
 func (h *Handlers) PostLink(w http.ResponseWriter, r *http.Request) {
@@ -37,7 +38,7 @@ func (h *Handlers) PostLink(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "incorrect format", http.StatusBadRequest)
 		return
 	}
-	res, err := h.srv.GetShortLink(rawUrl)
+	res, err := h.srv.GetShortLink(r.Context(), rawUrl)
 
 	if err != nil {
 		logger.Warn("response not found", zap.Error(err))
@@ -62,7 +63,7 @@ func (h *Handlers) GetLink(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "incorrect format", http.StatusBadRequest)
 		return
 	}
-	res, err := h.srv.GetBaseLink(rawShortUrl)
+	res, err := h.srv.GetBaseLink(r.Context(), rawShortUrl)
 	if err != nil {
 		logger.Warn("response not found", zap.Error(err))
 		http.Error(w, err.Error(), http.StatusNotFound)

@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"github.com/ilyakaznacheev/cleanenv"
 	"log"
 	"os"
@@ -12,13 +13,21 @@ type Config struct {
 	GRPCServerHostPort string `env:"SERVER_GRPC_HOST_PORT" env-default:"localhost:9000"`
 	StorageType        string `env:"STORAGE_TYPE" env-default:""`
 	Postgres           Postgres
+	Names              Names
 }
 
 type Postgres struct {
-	Username string `env:"POSTGRES_USER" env-default:"postgres"`
-	Password string `env:"POSTGRES_PASSWORD" env-default:"postgres"`
-	Host     string `env:"POSTGRES_HOST" env-default:"localhost"`
-	Port     string `env:"POSTGRES_PORT" env-default:"5432"`
+	Username   string `env:"POSTGRES_USER" env-default:"postgres"`
+	Password   string `env:"POSTGRES_PASSWORD" env-default:"postgres"`
+	Host       string `env:"POSTGRES_HOST" env-default:"localhost"`
+	Port       string `env:"POSTGRES_PORT" env-default:"5432"`
+	Table      string `env:"POSTGRES_DB" env-default:"links"`
+	ConnString string
+}
+
+type Names struct {
+	App string `env:"APP_NAME" env-default:"linkshorter"`
+	DB  string `env:"DB_NAME" env-default:"linkshorter-db"`
 }
 
 var path = ".env"
@@ -37,6 +46,8 @@ func NewConfig() Config {
 	if env != "" {
 		cfg.StorageType = env
 	}
+	cfg.Postgres.ConnString = fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", cfg.Postgres.Username, cfg.Postgres.Password, cfg.Names.DB, cfg.Postgres.Port, cfg.Postgres.Table)
+
 	log.Printf("\t\tSTORAGE_TYPE=%s\n", cfg.StorageType)
 	log.Println("\t\tGet configuration - OK!")
 

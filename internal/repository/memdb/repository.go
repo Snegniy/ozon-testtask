@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/Snegniy/ozon-testtask/pkg/logger"
 	"go.uber.org/zap"
+	"golang.org/x/net/context"
 	"sync"
 )
 
@@ -22,7 +23,7 @@ func NewRepository() *Repository {
 	}
 }
 
-func (r *Repository) GetBaseURL(url string) (string, error) {
+func (r *Repository) GetBaseURL(ctx context.Context, url string) (string, error) {
 	logger.Debug("Repo:Getting base URL from local storage", zap.String("url", url))
 	r.mxBase.RLock()
 	defer r.mxBase.RUnlock()
@@ -33,7 +34,7 @@ func (r *Repository) GetBaseURL(url string) (string, error) {
 	return "", fmt.Errorf("short link for \"%s\" not found", url)
 }
 
-func (r *Repository) GetShortURL(url string) (string, error) {
+func (r *Repository) GetShortURL(ctx context.Context, url string) (string, error) {
 	logger.Debug("Repo:Getting short URL from local storage", zap.String("url", url))
 	r.mxShort.RLock()
 	defer r.mxShort.RUnlock()
@@ -45,9 +46,9 @@ func (r *Repository) GetShortURL(url string) (string, error) {
 
 }
 
-func (r *Repository) WriteNewLink(url, short string) (string, error) {
+func (r *Repository) WriteNewLink(ctx context.Context, url, short string) (string, error) {
 	logger.Debug("Repo:Write new URL to local storage", zap.String("baseurl", url), zap.String("shorturl", short))
-	if v, err := r.GetShortURL(url); err == nil {
+	if v, err := r.GetShortURL(ctx, url); err == nil {
 		return v, nil
 	}
 	r.mxBase.Lock()
