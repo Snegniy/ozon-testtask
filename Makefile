@@ -4,7 +4,11 @@ run:
 
 .PHONY: local
 local:
-	docker build -t linkshorter .
+	docker-compose --profile localdb up --build
+
+.PHONY: postgres
+postgres:
+	docker-compose --profile postgres up --build
 
 .PHONY: stop
 stop:

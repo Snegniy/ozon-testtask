@@ -15,10 +15,10 @@ type Config struct {
 }
 
 type Postgres struct {
-	Username string `env:"DB_USER" env-default:"postgres"`
-	Password string `env:"DB_PASSWORD" env-default:"postgres"`
-	Host     string `env:"DB_HOST" env-default:"localhost"`
-	Port     string `env:"DB_PORT" env-default:"5432"`
+	Username string `env:"POSTGRES_USER" env-default:"postgres"`
+	Password string `env:"POSTGRES_PASSWORD" env-default:"postgres"`
+	Host     string `env:"POSTGRES_HOST" env-default:"localhost"`
+	Port     string `env:"POSTGRES_PORT" env-default:"5432"`
 }
 
 var path = ".env"

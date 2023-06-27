@@ -7,31 +7,52 @@ services:
     restart: always
     env_file:
       - .env
+    profiles:
+      - postgres
     environment:
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: links
     ports:
-      - ${DB_PORT}:${DB_PORT}
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
     volumes:
       - db-data:/var/lib/postgresql/data
+      - ./migrations/:/docker-entrypoint-initdb.d/
     networks:
-      - net1
+      - default
 
-  app:
+  app-localdb:
+    container_name: ${APP_NAME}
+    build: ./
+    env_file:
+      - .env
+    environment:
+      - STORAGE_TYPE=memdb
+    networks:
+      - default
+    profiles:
+      - localdb
+    ports:
+      - ${SERVER_HTTP_HOST_PORT}:8000
+      - ${SERVER_GRPC_HOST_PORT}:9000
+
+  app-postgres:
     container_name: ${APP_NAME}
     build: ./
     depends_on:
       - postgres
     env_file:
       - .env
+    environment:
+      - STORAGE_TYPE=postgre
     networks:
-      - net1
+      - default
+    profiles:
+      - postgres
     ports:
       - ${SERVER_HTTP_HOST_PORT}:8000
       - ${SERVER_GRPC_HOST_PORT}:9000
+
+
 volumes:
   db-data:
-
-networks:
-  net1:
