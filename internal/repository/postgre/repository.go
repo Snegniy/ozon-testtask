@@ -7,6 +7,7 @@ import (
 	"github.com/Snegniy/ozon-testtask/pkg/logger"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"go.uber.org/zap"
+	"time"
 )
 
 const (
@@ -19,26 +20,39 @@ type Repository struct {
 
 func NewRepository(config config.Config) (*Repository, error) {
 	logger.Debug("Repo:Creating PostgresSQL repository")
-	ctx := context.Background()
-	var repo *Repository
-	//connString := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", config.Postgres.Username, config.Postgres.Password, config.Postgres.Host, config.Postgres.Port, table)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	pool, err := NewConnect(ctx, config)
+	if err != nil {
+		logger.Error("connect to DB error", zap.Error(err))
+		return nil, err
+	}
+	return &Repository{db: pool}, nil
+
+}
+
+func NewConnect(ctx context.Context, config config.Config) (*pgxpool.Pool, error) {
 	connString := fmt.Sprintf("postgres://%s:%s@linkshorter-db:%s/%s?sslmode=disable", config.Postgres.Username, config.Postgres.Password, config.Postgres.Port, table)
 	pool, err := pgxpool.New(ctx, connString)
 	if err != nil {
 		logger.Error("not connected to base", zap.Error(err), zap.String("connection", connString))
 		return nil, err
 	}
+	time.Sleep(time.Second * 2)
 	if err = pool.Ping(ctx); err != nil {
 		logger.Error("not ping base", zap.Error(err))
 		return nil, err
 	}
-	return repo, nil
+	return pool, nil
 }
 
 func (r *Repository) GetBaseURL(url string) (string, error) {
 	logger.Debug("Repo:Getting base URL from PostgresSQL storage", zap.String("url", url))
 	var res string
-	sql := fmt.Sprintf("SELECT shortlink FROM %s WHERE baselink = $1", table)
+	sql := `SELECT baselink 
+			FROM links 
+			WHERE shortlink = $1`
 	if err := r.db.QueryRow(context.Background(), sql, url).Scan(&res); err != nil {
 		logger.Warn("Couldn't find base URL", zap.String("shorturl", url))
 		return "", err
@@ -49,7 +63,9 @@ func (r *Repository) GetBaseURL(url string) (string, error) {
 func (r *Repository) GetShortURL(url string) (string, error) {
 	logger.Debug("Repo:Getting short URL from PostgresSQL storage", zap.String("url", url))
 	var res string
-	sql := fmt.Sprintf("SELECT * FROM links WHERE shortlink = $1")
+	sql := `SELECT shortlink 
+			FROM links 
+			WHERE baselink = $1`
 	if err := r.db.QueryRow(context.Background(), sql, url).Scan(&res); err != nil {
 		logger.Warn("Couldn't find short URL", zap.String("baseurl", url))
 		return "", err

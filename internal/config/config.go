@@ -1,16 +1,16 @@
 package config
 
 import (
-	"log"
-
 	"github.com/ilyakaznacheev/cleanenv"
+	"log"
+	"os"
 )
 
 type Config struct {
 	DebugMode          string `env:"SERVER_DEBUG_MODE" env-description:"Debug mode logger" env-default:"yes"`
 	HTTPServerHostPort string `env:"SERVER_HTTP_HOST_PORT" env-default:"localhost:8000"`
 	GRPCServerHostPort string `env:"SERVER_GRPC_HOST_PORT" env-default:"localhost:9000"`
-	StorageType        string `env:"STORAGE_TYPE" env-default:"memdb"`
+	StorageType        string `env:"STORAGE_TYPE" env-default:""`
 	Postgres           Postgres
 }
 
@@ -33,6 +33,11 @@ func NewConfig() Config {
 		log.Println(help)
 		log.Fatalf("%s", err)
 	}
+	env := os.Getenv("STORAGE_TYPE")
+	if env != "" {
+		cfg.StorageType = env
+	}
+	log.Printf("\t\tSTORAGE_TYPE=%s\n", cfg.StorageType)
 	log.Println("\t\tGet configuration - OK!")
 
 	return cfg

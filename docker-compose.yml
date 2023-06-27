@@ -16,8 +16,7 @@ services:
     ports:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
     volumes:
-      - db-data:/var/lib/postgresql/data
-      - ./migrations/:/docker-entrypoint-initdb.d/
+      - ./migrations/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - default
 
@@ -52,7 +51,3 @@ services:
     ports:
       - ${SERVER_HTTP_HOST_PORT}:8000
       - ${SERVER_GRPC_HOST_PORT}:9000
-
-
-volumes:
-  db-data:

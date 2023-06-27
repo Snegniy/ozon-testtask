@@ -12,4 +12,5 @@ COPY --from=builder /linkshorter/app .
 COPY /.env .
 
 EXPOSE 8000 9000
-CMD ./app
+
+ENTRYPOINT ["./app"]

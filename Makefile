@@ -4,21 +4,17 @@ run:
 
 .PHONY: local
 local:
+	docker-compose down --remove-orphans
 	docker-compose --profile localdb up --build
 
 .PHONY: postgres
 postgres:
+	docker-compose down --remove-orphans
 	docker-compose --profile postgres up --build
 
 .PHONY: stop
 stop:
 	docker-compose down --remove-orphans
-
-.PHONY: build
-build:
-	docker-compose down --remove-orphans
-	docker-compose build
-
 
 .PHONY: test
 test:
@@ -34,10 +30,4 @@ proto:
             --plugin=protoc-gen-go-grpc=bin/protoc-gen-go-grpc \
             api/proto/shortlinks.proto
 
-.DEFAULT_GOAL := run
-
-
-#ран локал
-#ран посгрес
-#докер билд локал
-#докер билд посгрес
+.DEFAULT_GOAL := local
