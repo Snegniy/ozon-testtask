@@ -111,13 +111,14 @@ make run
 ## HTTP
 При дефолтных настройках сервер доступен по localhost:8000
 #### /
-* `POST` / `{"url":"site:}`   - Запрос на получение короткой ссылки
+* `POST` / `{"url":"site"}`   - Запрос на получение короткой ссылки
   
 #### /
-* `GET` / `{"url":"short_link:}` - Запрос на получение полной ссылки
+* `GET` / `{"url":"short_link"}` - Запрос на получение полной ссылки
 
 ## gRPC
 При дефолтных настройках сервер доступен по localhost:9000
+
 Файл [proto](https://github.com/Snegniy/ozon-testtask/blob/main/api/proto/shortlinks.proto)
-* `GetShortLink` `{"url":"site:}`   - Запрос на получение короткой ссылки
-* `GetBaseLink` `{"url":"site:}`   - Запрос на получение короткой ссылки
+* `GetShortLink` `{"url":"site"}`   - Запрос на получение короткой ссылки
+* `GetBaseLink` `{"url":"short_link"}`   - Запрос на получение полной ссылки
