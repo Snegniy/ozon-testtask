@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"github.com/Snegniy/ozon-testtask/internal/model"
 	"github.com/Snegniy/ozon-testtask/pkg/logger"
-	"github.com/go-chi/chi"
 	"go.uber.org/zap"
 	"net/http"
 )
@@ -15,18 +14,8 @@ type Handlers struct {
 }
 
 func NewHttpHandlers(srv Services) *Handlers {
-	//logger.Debug("new rest handlers")
+	logger.Debug("new rest handlers")
 	return &Handlers{srv: srv}
-}
-
-func (h *Handlers) Register(r *chi.Mux) {
-	r.Post("/", h.PostLink)
-	r.Get("/", h.GetLink)
-}
-
-type Handler interface {
-	PostLink(w http.ResponseWriter, r *http.Request)
-	GetLink(w http.ResponseWriter, r *http.Request)
 }
 
 type Services interface {

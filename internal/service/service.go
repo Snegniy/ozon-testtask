@@ -12,6 +12,8 @@ type Service struct {
 	repo Repository
 }
 
+//go:generate mockgen -source=service.go -destination=mocks/mock.go
+
 func NewService(repo Repository) *Service {
 	logger.Debug("creating service")
 	return &Service{repo: repo}

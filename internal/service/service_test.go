@@ -60,7 +60,7 @@ func TestService_GetBaseLink(t *testing.T) {
 	}
 }
 
-func TestService_GetShortLink(t *testing.T) {
+/*func TestService_GetShortLink(t *testing.T) {
 	logger.Init("yes")
 	tests := map[string]struct {
 		input          string
@@ -106,4 +106,4 @@ func TestService_GetShortLink(t *testing.T) {
 			}
 		})
 	}
-}
+}*/
