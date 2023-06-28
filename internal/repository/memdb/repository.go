@@ -2,7 +2,7 @@ package memdb
 
 import (
 	"context"
-	"fmt"
+	"github.com/Snegniy/ozon-testtask/internal/apperror"
 	"github.com/Snegniy/ozon-testtask/pkg/logger"
 	"go.uber.org/zap"
 	"sync"
@@ -31,7 +31,7 @@ func (r *Repository) GetBaseURL(ctx context.Context, url string) (string, error)
 		return v, nil
 	}
 	logger.Warn("Couldn't find base URL", zap.String("shorturl", url))
-	return "", fmt.Errorf("short link for \"%s\" not found", url)
+	return "", apperror.ErrNotFound
 }
 
 func (r *Repository) GetShortURL(ctx context.Context, url string) (string, error) {
@@ -42,7 +42,7 @@ func (r *Repository) GetShortURL(ctx context.Context, url string) (string, error
 		return v, nil
 	}
 	logger.Warn("Couldn't find short URL", zap.String("baseurl", url))
-	return "", fmt.Errorf("base link for \"%s\" not found", url)
+	return "", apperror.ErrNotFound
 
 }
 

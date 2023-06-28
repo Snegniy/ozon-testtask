@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	"fmt"
+	"github.com/Snegniy/ozon-testtask/internal/apperror"
 	"github.com/Snegniy/ozon-testtask/internal/model"
 	"github.com/Snegniy/ozon-testtask/pkg/logger"
 	"github.com/Snegniy/ozon-testtask/pkg/urlgenerator"
@@ -29,7 +29,7 @@ func (s *Service) GetShortLink(ctx context.Context, url string) (model.UrlStorag
 	logger.Debug("Service:GetShortLink")
 	if url == "" {
 		logger.Warn("empty url")
-		return model.UrlStorage{}, fmt.Errorf("url cannot be empty")
+		return model.UrlStorage{}, apperror.ErrIsEmpty
 	}
 	res, err := s.repo.GetShortURL(ctx, url)
 	if err != nil {
@@ -45,14 +45,14 @@ func (s *Service) GetShortLink(ctx context.Context, url string) (model.UrlStorag
 		}
 		return model.UrlStorage{ShortURL: newLink}, nil
 	}
-	return model.UrlStorage{ShortURL: res}, err
+	return model.UrlStorage{ShortURL: res}, nil
 }
 
 func (s *Service) GetBaseLink(ctx context.Context, url string) (model.UrlStorage, error) {
 	logger.Debug("Service:GetBaseLink")
 	if url == "" {
 		logger.Warn("empty url")
-		return model.UrlStorage{}, fmt.Errorf("url cannot be empty")
+		return model.UrlStorage{}, apperror.ErrIsEmpty
 	}
 	res, err := s.repo.GetBaseURL(ctx, url)
 	return model.UrlStorage{BaseURL: res}, err

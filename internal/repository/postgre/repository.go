@@ -2,6 +2,7 @@ package postgre
 
 import (
 	"context"
+	"github.com/Snegniy/ozon-testtask/internal/apperror"
 	"github.com/Snegniy/ozon-testtask/pkg/logger"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"go.uber.org/zap"
@@ -24,7 +25,7 @@ func (r *Repository) GetBaseURL(ctx context.Context, url string) (string, error)
 			WHERE shortlink = $1`
 	if err := r.db.QueryRow(ctx, sql, url).Scan(&res); err != nil {
 		logger.Warn("Couldn't find base URL", zap.String("shorturl", url))
-		return "", err
+		return "", apperror.ErrNotFound
 	}
 	return res, nil
 }
@@ -37,7 +38,7 @@ func (r *Repository) GetShortURL(ctx context.Context, url string) (string, error
 			WHERE baselink = $1`
 	if err := r.db.QueryRow(ctx, sql, url).Scan(&res); err != nil {
 		logger.Warn("Couldn't find short URL", zap.String("baseurl", url))
-		return "", err
+		return "", apperror.ErrNotFound
 	}
 	return res, nil
 }

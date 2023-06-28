@@ -69,6 +69,8 @@ make run
 ├── cmd
 │   ├── main.go          // запуск приложения
 ├── internal
+│   ├── apperror
+│   │   ├── error.go  // объявление ошибок приложения
 │   ├── config
 │   │   ├── config.go   // инициализация конфигурации приложения 
 │   ├── model
