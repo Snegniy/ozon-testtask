@@ -1,0 +1,88 @@
+### Successful test: check response status is 200
+POST http://localhost:8000/
+Content-Type: application/json
+
+{
+  "url": "ozon.ru"
+}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### Failed test: check response status is 400
+
+POST http://localhost:8000/
+Content-Type: application/json
+
+{
+  "uuurl": "ozon.ru"
+}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 400, "Response status is not 200");
+    });
+%}
+
+### Failed test: check response status is 404
+
+POST http://localhost:8000/
+Content-Type: application/json
+
+{
+  "url": ""
+}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 404, "Response status is not 200");
+    });
+%}
+
+### Failed test: check response status is 404
+
+GET http://localhost:8000/
+Content-Type: application/json
+
+{
+  "url": "AAAAAAAAAA"
+}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 404, "Response status is not 200");
+    });
+%}
+
+### Failed test: check response status is 400
+
+GET http://localhost:8000/
+Content-Type: application/json
+
+{
+  "uuurl": "ozon.ru"
+}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 400, "Response status is not 200");
+    });
+%}
+
+### Failed test: check response status is 404
+
+GET http://localhost:8000/
+Content-Type: application/json
+
+{
+  "url": ""
+}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 404, "Response status is not 200");
+    });
+%}
