@@ -10,8 +10,6 @@ import (
 	"net/http"
 )
 
-//go:generate mockgen -source=rest.go -destination=mocks/mock.go
-
 type Handlers struct {
 	srv Services
 }

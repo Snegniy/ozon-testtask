@@ -1,7 +1,6 @@
-package service
+package urlgenerator
 
 import (
-	"context"
 	"github.com/Snegniy/ozon-testtask/pkg/logger"
 	"math/rand"
 )
@@ -14,20 +13,13 @@ const (
 	chars      = charsLower + charsUpper + digits + special
 )
 
-func (s *Service) GenerateLink(ctx context.Context) string {
+func GenerateLink() string {
 	logger.Debug("Generating link")
 	res := make([]byte, 10)
 
-	for {
-		for i := range res {
-			res[i] = chars[rand.Intn(len(chars))]
-		}
-		_, err := s.repo.GetBaseURL(ctx, string(res))
-
-		if err != nil {
-			break
-		}
-		logger.Warn("multiple links")
+	for i := range res {
+		res[i] = chars[rand.Intn(len(chars))]
 	}
+
 	return string(res)
 }

@@ -5,16 +5,15 @@ import (
 	"fmt"
 	"github.com/Snegniy/ozon-testtask/internal/model"
 	"github.com/Snegniy/ozon-testtask/pkg/logger"
+	"github.com/Snegniy/ozon-testtask/pkg/urlgenerator"
 )
-
-//go:generate mockgen -source=service.go -destination=mocks/mock.go
 
 type Service struct {
 	repo Repository
 }
 
 func NewService(repo Repository) *Service {
-	//logger.Debug("creating service")
+	logger.Debug("creating service")
 	return &Service{repo: repo}
 }
 
@@ -32,17 +31,25 @@ func (s *Service) GetShortLink(ctx context.Context, url string) (model.UrlStorag
 	}
 	res, err := s.repo.GetShortURL(ctx, url)
 	if err != nil {
-		short := s.GenerateLink(ctx)
-		newLink, _ := s.repo.WriteNewLink(ctx, url, short)
+		var newLink string
+		for {
+			short := urlgenerator.GenerateLink()
+			_, err := s.repo.GetBaseURL(ctx, short)
+			if err != nil {
+				newLink, _ = s.repo.WriteNewLink(ctx, url, short)
+				break
+			}
+			logger.Warn("multiple links")
+		}
 		return model.UrlStorage{ShortURL: newLink}, nil
 	}
 	return model.UrlStorage{ShortURL: res}, err
 }
 
 func (s *Service) GetBaseLink(ctx context.Context, url string) (model.UrlStorage, error) {
-	//logger.Debug("Service:GetBaseLink")
+	logger.Debug("Service:GetBaseLink")
 	if url == "" {
-		//logger.Warn("empty url")
+		logger.Warn("empty url")
 		return model.UrlStorage{}, fmt.Errorf("url cannot be empty")
 	}
 	res, err := s.repo.GetBaseURL(ctx, url)
