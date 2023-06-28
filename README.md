@@ -1,5 +1,16 @@
 # Ozon Test Task - Link Shortener
-"Задача:
+
+# Содержание
+1. [Задача](#Задача)
+2. [Скачивание приложения](#Installation)
+3. [Команды для запуска](#Command)
+4. [Структура приложения](#Structure)
+5. [Описание HTTP API](#HTTP)
+6. [Описание gRPC](#gRPC)
+
+
+
+## Задача
 
 Реализовать сервис, предоставляющий API по созданию сокращённых ссылок.
 
@@ -20,19 +31,13 @@
 *  Реализованный функционал покрыт тестами.
 "
 
-## Installation & Run
+## Installation
 ```bash
 # Download this project
-git clone https://github.com/Snegniy/ozon-testtask.git
-```
+git clone https://github.com/Snegniy/ozon-testtask.git && cd ozon-testtask
 
-
-```bash
-# Build and Run
-cd github.com/Snegniy/testTaskResponseApi/cmd
-go build -o testapp
-./testapp
-
+# HTTP API Endpoint : http://127.0.0.1:8000/
+# gRPC Endpoint : http://127.0.0.1:9000/
 ```
 
 ## Command
@@ -103,10 +108,16 @@ make run
 ├── Makefile
 ```
 
-## HTTP API
-
+## HTTP
+При дефолтных настройках сервер доступен по localhost:8000
 #### /
-* `GET` : {"url":"site:} - Запрос на получение короткой ссылки
-
+* `POST` / `{"url":"site:}`   - Запрос на получение короткой ссылки
+  
 #### /
-* `POST` : {"url":"short_url:} - Запрос на получение полной ссылки
+* `GET` / `{"url":"short_link:}` - Запрос на получение полной ссылки
+
+## gRPC
+При дефолтных настройках сервер доступен по localhost:9000
+Файл [proto](https://github.com/Snegniy/ozon-testtask/blob/main/api/proto/shortlinks.proto)
+* `GetShortLink` `{"url":"site:}`   - Запрос на получение короткой ссылки
+* `GetBaseLink` `{"url":"site:}`   - Запрос на получение короткой ссылки
