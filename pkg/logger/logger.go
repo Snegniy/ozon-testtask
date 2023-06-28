@@ -28,6 +28,10 @@ func configLogger(mode string) *zap.Logger {
 	return logger
 }
 
+func Dummy(msg string, fields ...zap.Field) {
+	log.Debug(msg, fields...)
+}
+
 func Debug(msg string, fields ...zap.Field) {
 	log.Debug(msg, fields...)
 }

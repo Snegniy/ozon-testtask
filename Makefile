@@ -30,4 +30,8 @@ proto:
             --plugin=protoc-gen-go-grpc=bin/protoc-gen-go-grpc \
             api/proto/shortlinks.proto
 
+.PHONY: generate
+generate:
+	go generate ./...
+
 .DEFAULT_GOAL := local

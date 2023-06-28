@@ -7,7 +7,7 @@ import (
 	"github.com/Snegniy/ozon-testtask/internal/repository/postgre"
 	"github.com/Snegniy/ozon-testtask/internal/service"
 	grpchandlers "github.com/Snegniy/ozon-testtask/internal/transport/grpc"
-	"github.com/Snegniy/ozon-testtask/internal/transport/http"
+	"github.com/Snegniy/ozon-testtask/internal/transport/rest"
 	"github.com/Snegniy/ozon-testtask/pkg/graceful"
 	"github.com/Snegniy/ozon-testtask/pkg/logger"
 	"github.com/Snegniy/ozon-testtask/pkg/postgres"
@@ -41,7 +41,7 @@ func main() {
 	}
 
 	s := service.NewService(r)
-	h := http.NewHttpHandlers(s)
+	h := rest.NewHttpHandlers(s)
 	g := grpchandlers.NewGrpcServer(s)
 
 	Register(router, h)
@@ -49,7 +49,7 @@ func main() {
 	g.StartServer(cfg.GRPCServerHostPort)
 
 }
-func Register(r *chi.Mux, h *http.Handlers) {
+func Register(r *chi.Mux, h *rest.Handlers) {
 	r.Post("/", h.PostLink)
 	r.Get("/", h.GetLink)
 }

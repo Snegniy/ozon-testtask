@@ -7,12 +7,14 @@ import (
 	"github.com/Snegniy/ozon-testtask/pkg/logger"
 )
 
+//go:generate mockgen -source=service.go -destination=mocks/mock.go
+
 type Service struct {
 	repo Repository
 }
 
 func NewService(repo Repository) *Service {
-	logger.Debug("creating service")
+	//logger.Debug("creating service")
 	return &Service{repo: repo}
 }
 
@@ -38,9 +40,9 @@ func (s *Service) GetShortLink(ctx context.Context, url string) (model.UrlStorag
 }
 
 func (s *Service) GetBaseLink(ctx context.Context, url string) (model.UrlStorage, error) {
-	logger.Debug("Service:GetBaseLink")
+	//logger.Debug("Service:GetBaseLink")
 	if url == "" {
-		logger.Warn("empty url")
+		//logger.Warn("empty url")
 		return model.UrlStorage{}, fmt.Errorf("url cannot be empty")
 	}
 	res, err := s.repo.GetBaseURL(ctx, url)

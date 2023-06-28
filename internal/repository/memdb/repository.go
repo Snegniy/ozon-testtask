@@ -1,10 +1,10 @@
 package memdb
 
 import (
+	"context"
 	"fmt"
 	"github.com/Snegniy/ozon-testtask/pkg/logger"
 	"go.uber.org/zap"
-	"golang.org/x/net/context"
 	"sync"
 )
 

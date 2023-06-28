@@ -1,21 +1,34 @@
-package http
+package rest
 
 import (
 	"context"
 	"encoding/json"
 	"github.com/Snegniy/ozon-testtask/internal/model"
 	"github.com/Snegniy/ozon-testtask/pkg/logger"
+	"github.com/go-chi/chi"
 	"go.uber.org/zap"
 	"net/http"
 )
+
+//go:generate mockgen -source=rest.go -destination=mocks/mock.go
 
 type Handlers struct {
 	srv Services
 }
 
 func NewHttpHandlers(srv Services) *Handlers {
-	logger.Debug("new http handlers")
+	//logger.Debug("new rest handlers")
 	return &Handlers{srv: srv}
+}
+
+func (h *Handlers) Register(r *chi.Mux) {
+	r.Post("/", h.PostLink)
+	r.Get("/", h.GetLink)
+}
+
+type Handler interface {
+	PostLink(w http.ResponseWriter, r *http.Request)
+	GetLink(w http.ResponseWriter, r *http.Request)
 }
 
 type Services interface {
@@ -24,7 +37,7 @@ type Services interface {
 }
 
 func (h *Handlers) PostLink(w http.ResponseWriter, r *http.Request) {
-	logger.Debug("post http link")
+	logger.Debug("post rest link")
 	body := make(map[string]string)
 	err := json.NewDecoder(r.Body).Decode(&body)
 	if err != nil {
@@ -49,7 +62,7 @@ func (h *Handlers) PostLink(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handlers) GetLink(w http.ResponseWriter, r *http.Request) {
-	logger.Debug("get http link")
+	logger.Debug("get rest link")
 	body := make(map[string]string)
 	err := json.NewDecoder(r.Body).Decode(&body)
 	if err != nil {
